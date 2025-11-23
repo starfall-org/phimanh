@@ -1,23 +1,32 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import MovieMinimalCard from "@/components/movie/movie-minimal";
 
-interface TopicSectionProps {
-  topic: {
-    name: string;
-    slug: string;
-  };
-  movies: any[];
+interface RecentlyWatchedProps {
+  // No props needed, will fetch from cookies
 }
 
-export default function TopicSection({ topic, movies }: TopicSectionProps) {
+export default function RecentlyWatched({}: RecentlyWatchedProps) {
+  const [movies, setMovies] = useState<any[]>([]);
+
+  useEffect(() => {
+    const Cookies = require('js-cookie');
+    const recentlyWatched = JSON.parse(Cookies.get('recentlyWatched') || '[]');
+    setMovies(recentlyWatched);
+  }, []);
+
+  if (movies.length === 0) return null;
+
   return (
     <section className="py-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          {topic.name}
+          Đã Xem Gần Đây
         </h2>
         <Link
-          href={`/?topic=${topic.slug}`}
+          href={`/recently`}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 dark:text-blue-400 dark:border-blue-400 font-semibold transition-colors"
         >
           <svg
@@ -37,25 +46,22 @@ export default function TopicSection({ topic, movies }: TopicSectionProps) {
         </Link>
       </div>
 
-      {movies.length > 0 ? (
-        <div className="flex overflow-x-auto gap-4 pb-4 md:grid md:gap-6 md:auto-rows-[280px] md:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] md:overflow-visible">
-          {movies.map((movie: any, index: number) => (
-            <div
-              key={movie.slug}
-              className="flex-shrink-0 w-44 md:w-auto"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <MovieMinimalCard movie={movie} />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-gray-500 dark:text-gray-400">
-            Chưa có phim nào trong danh mục này
-          </p>
-        </div>
-      )}
+      <div
+        className="grid gap-6 auto-rows-[280px]"
+        style={{
+          gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+        }}
+      >
+        {movies.map((movie: any, index: number) => (
+          <div
+            key={movie.slug}
+            className="animate-float"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            <MovieMinimalCard movie={movie} />
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

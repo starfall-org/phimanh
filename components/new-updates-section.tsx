@@ -1,23 +1,19 @@
 import Link from "next/link";
 import MovieMinimalCard from "@/components/movie/movie-minimal";
 
-interface TopicSectionProps {
-  topic: {
-    name: string;
-    slug: string;
-  };
+interface NewUpdatesSectionProps {
   movies: any[];
 }
 
-export default function TopicSection({ topic, movies }: TopicSectionProps) {
+export default function NewUpdatesSection({ movies }: NewUpdatesSectionProps) {
   return (
     <section className="py-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          {topic.name}
+          Mới Cập Nhật
         </h2>
         <Link
-          href={`/?topic=${topic.slug}`}
+          href="/new-updates"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 dark:text-blue-400 dark:border-blue-400 font-semibold transition-colors"
         >
           <svg
@@ -52,7 +48,7 @@ export default function TopicSection({ topic, movies }: TopicSectionProps) {
       ) : (
         <div className="text-center py-12">
           <p className="text-gray-500 dark:text-gray-400">
-            Chưa có phim nào trong danh mục này
+            Chưa có phim mới cập nhật
           </p>
         </div>
       )}
